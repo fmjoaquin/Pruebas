@@ -3,7 +3,7 @@ pipeline {
   stages {
     stage('COMPILADO') {
       steps {
-        svn 'https://svn.justicia.es/OTROS/FRAMEWORK20/TRUNK/Codigo/PB3'
+        echo 'Hola mundo pipelines'
       }
     }
     stage('TEST') {
