@@ -11,9 +11,24 @@ pipeline {
         echo 'Hola'
       }
     }
-    stage('DESPLIEGUE') {
+    stage('DESP. DESA') {
       steps {
         input(message: 'Quieres desplegar en pruebas?', id: 'desplieguePruebas', ok: 'ok')
+      }
+    }
+    stage('DESP. PRU') {
+      steps {
+        echo 'He desplegado en pruebas'
+      }
+    }
+    stage('DESP. PRE') {
+      steps {
+        echo 'He desplegado en pre'
+      }
+    }
+    stage('DESP. PRO') {
+      steps {
+        echo 'He desplegado en pro'
       }
     }
   }
