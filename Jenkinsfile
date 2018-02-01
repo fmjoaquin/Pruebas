@@ -1,11 +1,20 @@
 pipeline {
   agent any
+  tools {
+        maven 'Maven 3.3.9'
+        jdk 'jdk8'
+    }
   stages {
     stage('COMPILADO') {
       steps {
         echo 'Hola mundo pipelines'
         git 'https://github.com/kliakos/sparkjava-war-example.git'
       }
+    }
+	stage ('Build') {
+		steps {
+			sh 'mvn -Dmaven.test.failure.ignore=true install' 
+		}		
     }
     stage('TEST') {
       steps {
