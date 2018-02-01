@@ -4,7 +4,7 @@ pipeline {
     stage('Build') {
       steps {
         echo 'Building..'
-        sh 'git clone https://github.com/kliakos/sparkjava-war-example.git'
+        git 'https://github.com/kliakos/sparkjava-war-example.git'
       }
     }
     stage('Test') {
