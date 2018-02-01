@@ -1,41 +1,38 @@
-pipeline {
-  agent any  
-  stages {
-    stage('COMPILADO') {
-      steps {
-        echo 'Hola mundo pipelines'
-        git 'https://github.com/kliakos/sparkjava-war-example.git'
-      }
+stage 'Compile'
+node('linux1') {
+    checkout scm
+    // use for non multibranch: git 'https://github.com/amuniz/maven-helloworld.git'
+    def mvnHome = tool 'maven-3'
+    sh "${mvnHome}/bin/mvn clean install -DskipTests"
+    stash 'working-copy'
+}
+
+stage 'Test'
+parallel one: {
+    node('linux1') {
+        unstash 'working-copy'
+        def mvnHome = tool 'maven-3'
+        sh "${mvnHome}/bin/mvn test -Diterations=10"
     }
-	stage ('Build') {
-		steps {
-			sh 'mvn -Dmaven.test.failure.ignore=true install' 
-		}		
+}, two: {
+    node('linux2') {
+        unstash 'working-copy'
+        def mvnHome = tool 'maven-3'
+        sh "${mvnHome}/bin/mvn test -Diterations=5"
     }
-    stage('TEST') {
-      steps {
-        echo 'Hola'
-      }
-    }
-    stage('DESP. DESA') {
-      steps {
-        input(message: 'Quieres desplegar en pruebas?', id: 'desplieguePruebas', ok: 'ok')
-      }
-    }
-    stage('DESP. PRU') {
-      steps {
-        echo 'He desplegado en pruebas'
-      }
-    }
-    stage('DESP. PRE') {
-      steps {
-        echo 'He desplegado en pre'
-      }
-    }
-    stage('DESP. PRO') {
-      steps {
-        echo 'He desplegado en pro'
-      }
-    }
-  }
+}, failFast: true
+
+stage 'Code Quality'
+node('linux1') {
+    unstash 'working-copy'
+    step([$class: 'CheckStylePublisher'])
+    step([$class: 'FindBugsPublisher'])
+    step([$class: 'PmdPublisher'])
+}
+
+stage name: 'Deploy', concurrency: 1
+def path = input message: 'Where should I deploy this build?', parameters: [[$class: 'StringParameterDefinition', name: 'FILE_PATH']]
+node('linux1') {
+    unstash 'working-copy'
+    sh "cp target/example-1.0-SNAPSHOT.jar ${path}"
 }
