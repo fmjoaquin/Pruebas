@@ -3,8 +3,10 @@ pipeline {
   stages {
     stage('Build') {
       steps {
-        echo 'Building..'
+        echo 'Bajando Codigo'
         git 'https://github.com/kliakos/sparkjava-war-example.git'
+        echo 'COnstruyendo'
+        sh 'mvn -Dmaven.test.failure.ignore=true install' 
       }
     }
     stage('Test') {
