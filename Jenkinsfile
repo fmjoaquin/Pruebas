@@ -6,7 +6,7 @@ pipeline {
         echo 'Bajando Codigo'
         git 'https://github.com/kliakos/sparkjava-war-example.git'
         echo 'COnstruyendo'
-        sh 'mvn -Dmaven.test.failure.ignore=true install' 
+        bat 'mvn -Dmaven.test.failure.ignore=true install' 
       }
     }
     stage('Test') {
