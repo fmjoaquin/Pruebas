@@ -4,6 +4,7 @@ pipeline {
     stage('COMPILADO') {
       steps {
         echo 'Hola mundo pipelines'
+        git 'https://github.com/kliakos/sparkjava-war-example.git'
       }
     }
     stage('TEST') {
