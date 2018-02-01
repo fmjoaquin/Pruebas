@@ -1,38 +1,38 @@
-stage 'Compile'
-node('linux1') {
-    checkout scm
-    // use for non multibranch: git 'https://github.com/amuniz/maven-helloworld.git'
-    def mvnHome = tool 'maven-3'
-    sh "${mvnHome}/bin/mvn clean install -DskipTests"
-    stash 'working-copy'
-}
-
-stage 'Test'
-parallel one: {
-    node('linux1') {
-        unstash 'working-copy'
-        def mvnHome = tool 'maven-3'
-        sh "${mvnHome}/bin/mvn test -Diterations=10"
+node {
+    def server
+    def buildInfo
+    def rtMaven
+    
+    stage ('Clone') {
+        git url: 'https://github.com/jfrogdev/project-examples.git'
     }
-}, two: {
-    node('linux2') {
-        unstash 'working-copy'
-        def mvnHome = tool 'maven-3'
-        sh "${mvnHome}/bin/mvn test -Diterations=5"
+ 
+    stage ('Artifactory configuration') {
+        // Obtain an Artifactory server instance, defined in Jenkins --> Manage:
+        server = Artifactory.server SERVER_ID
+
+        rtMaven = Artifactory.newMavenBuild()
+        rtMaven.tool = MAVEN_TOOL // Tool name from Jenkins configuration
+        rtMaven.deployer releaseRepo: 'libs-release-local', snapshotRepo: 'libs-snapshot-local', server: server
+        rtMaven.resolver releaseRepo: 'libs-release', snapshotRepo: 'libs-snapshot', server: server
+        rtMaven.deployer.deployArtifacts = false // Disable artifacts deployment during Maven run
+
+        buildInfo = Artifactory.newBuildInfo()
     }
-}, failFast: true
-
-stage 'Code Quality'
-node('linux1') {
-    unstash 'working-copy'
-    step([$class: 'CheckStylePublisher'])
-    step([$class: 'FindBugsPublisher'])
-    step([$class: 'PmdPublisher'])
-}
-
-stage name: 'Deploy', concurrency: 1
-def path = input message: 'Where should I deploy this build?', parameters: [[$class: 'StringParameterDefinition', name: 'FILE_PATH']]
-node('linux1') {
-    unstash 'working-copy'
-    sh "cp target/example-1.0-SNAPSHOT.jar ${path}"
+ 
+    stage ('Test') {
+        rtMaven.run pom: 'maven-example/pom.xml', goals: 'clean test'
+    }
+        
+    stage ('Install') {
+        rtMaven.run pom: 'maven-example/pom.xml', goals: 'install', buildInfo: buildInfo
+    }
+ 
+    stage ('Deploy') {
+        rtMaven.deployer.deployArtifacts buildInfo
+    }
+        
+    stage ('Publish build info') {
+        server.publishBuildInfo buildInfo
+    }
 }
