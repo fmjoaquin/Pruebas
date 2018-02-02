@@ -23,7 +23,7 @@ node {
                           depthOption: 'infinity', 
                           ignoreExternalsOption: true, local: '.', 
                           remote: 'https://svn.justicia.es/OTROS/FRAMEWORK20/TRUNK/Codigo/Visor']], 
-             quietOperation: true, workspaceUpdater: [$class: 'UpdateUpdater']])
+             quietOperation: false, workspaceUpdater: [$class: 'UpdateUpdater']])
 
    stage('Build') {
       // Run the maven build
