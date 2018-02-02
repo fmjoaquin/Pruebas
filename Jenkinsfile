@@ -31,6 +31,6 @@ node {
    }
    stage('Results') {
       //junit '**/target/surefire-reports/TEST-*.xml'
-      archive 'justihome-webapp/target/*.war'
+      archive 'Visor/target/*.war'
    }
 }
