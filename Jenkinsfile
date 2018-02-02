@@ -27,7 +27,7 @@ node {
 
    stage('Build') {
       // Run the maven build
-      bat "'${mvnHome}/bin/mvn' -V -Dmaven.test.failure.ignore clean"
+      bat "${mvnHome}/bin/mvn clean install -Dmaven.test.skip=true"
    }
    stage('Results') {
       //junit '**/target/surefire-reports/TEST-*.xml'
