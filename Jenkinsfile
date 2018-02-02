@@ -8,7 +8,7 @@ node {
       //Especifar versión de JDK
       env.JAVA_HOME="${tool 'JDK8'}"
       env.PATH="${env.JAVA_HOME}/bin:${env.PATH}"
-      sh 'java -version'
+      bat 'java -version'
    }
    checkout([$class: 'SubversionSCM', 
           additionalCredentials: [], 
@@ -27,7 +27,7 @@ node {
           workspaceUpdater: [$class: 'UpdateUpdater']])
    stage('Build') {
       // Run the maven build
-      sh "'${mvnHome}/bin/mvn' -V -Dmaven.test.failure.ignore clean"
+      bat "'${mvnHome}/bin/mvn' -V -Dmaven.test.failure.ignore clean"
    }
    stage('Results') {
       //junit '**/target/surefire-reports/TEST-*.xml'
