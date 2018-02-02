@@ -11,20 +11,20 @@ node {
       bat 'java -version'
    }
    checkout([$class: 'SubversionSCM', 
-          additionalCredentials: [], 
-          excludedCommitMessages: '', 
-          excludedRegions: '', 
-          excludedRevprop: '', 
-          excludedUsers: '', 
-          filterChangelog: false, 
-          ignoreDirPropChanges: false, 
-          includedRegions: '', 
-          locations: [[credentialsId: 'e4648de6-c36f-4616-9873-72f3bf4ae4b5', 
-                       depthOption: 'infinity', 
-                       ignoreExternalsOption: true, 
-                       local: '.', 
-                       remote: 'https://svn.justicia.es/OTROS/ESCINT_FWK2/TRUNK/justihome']], 
-          workspaceUpdater: [$class: 'UpdateUpdater']])
+             additionalCredentials: [], 
+             excludedCommitMessages: '', 
+             excludedRegions: '', 
+             excludedRevprop: '', 
+             excludedUsers: '', 
+             filterChangelog: false, 
+             ignoreDirPropChanges: false, 
+             includedRegions: '', 
+             locations: [[credentialsId: '83063e50-9328-4fc1-a9a3-9056409c78b1', 
+                          depthOption: 'infinity', 
+                          ignoreExternalsOption: true, local: '.', 
+                          remote: 'https://svn.justicia.es/OTROS/FRAMEWORK20/TRUNK/Codigo/Visor']], 
+             quietOperation: true, workspaceUpdater: [$class: 'UpdateUpdater']])
+
    stage('Build') {
       // Run the maven build
       bat "'${mvnHome}/bin/mvn' -V -Dmaven.test.failure.ignore clean"
