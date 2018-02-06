@@ -16,6 +16,7 @@ pipeline {
             ])
         }
         echo ("Env: "+userInput)
+      }
     }
     stage('Deploy') {
       steps {
