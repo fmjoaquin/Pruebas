@@ -1,27 +1,14 @@
 pipeline {
-  agent any
-  stages {
-    stage('Build') {
-      steps {
-        echo 'Building..'
-      }
-    }
-    stage('Test') {
-      steps {
-        echo 'Testing..'
-        script {
-            def userInput = input(
-            id: 'userInput', message: 'Let\'s promote?', parameters: [
-            [$class: 'TextParameterDefinition', defaultValue: 'uat', description: 'Environment', name: 'env']
-            ])
+    agent any
+    stages {
+        stage("foo") {
+            steps {
+                script {
+                    env.RELEASE_SCOPE = input message: 'User input required', ok: 'Release!',
+                            parameters: [choice(name: 'RELEASE_SCOPE', choices: 'patch\nminor\nmajor', description: 'What is the release scope?')]
+                }
+                echo "${env.RELEASE_SCOPE}"
+            }
         }
-        echo ("Env: "+userInput)
-      }
     }
-    stage('Deploy') {
-      steps {
-        echo 'Deploying....'
-      }
-    }
-  }
 }
