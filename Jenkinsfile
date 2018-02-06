@@ -3,6 +3,7 @@ node {
        def abcs = ['a', 'b', 'c']        
         for (i in abcs) {
             echo i
+            echo "entro"
          }
     }
     
