@@ -1,6 +1,7 @@
 node {
     stage('Example') {       
-        for (i in [ 'a', 'b', 'c' ]) {
+       def abcs = ['a', 'b', 'c']        
+        for (i in abcs) {
             echo i
          }
     }
