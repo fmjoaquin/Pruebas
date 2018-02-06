@@ -1,14 +1,13 @@
-pipeline {
-    agent any
-    stages {
-        stage("foo") {
-            steps {
-                script {
-                    env.RELEASE_SCOPE = input message: 'User input required', ok: 'Release!',
-                            parameters: [choice(name: 'RELEASE_SCOPE', choices: 'patch\nminor\nmajor', description: 'What is the release scope?')]
-                }
-                echo "${env.RELEASE_SCOPE}"
-            }
-        }
+node {
+    stage('Example') {       
+        echo 'I only execute on the master branch'        
+    }
+    
+     stage('Example2') {       
+        echo 'I only execute on the master branch'
+    }
+    
+    stage('Example3') {       
+        echo 'I only execute on the master branch'
     }
 }
