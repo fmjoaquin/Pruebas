@@ -9,8 +9,11 @@ pipeline {
     stage('Test') {
       steps {
         echo 'Testing..'
-        input(message: 'indicame el entorno', id: 'caca', ok: 'Vamos alla')
-      }
+        def userInput = input(
+ id: 'userInput', message: 'Let\'s promote?', parameters: [
+ [$class: 'TextParameterDefinition', defaultValue: 'uat', description: 'Environment', name: 'env']
+      ])
+        echo ("Env: "+userInput)
     }
     stage('Deploy') {
       steps {
