@@ -1,6 +1,8 @@
 node {
     stage('Example') {       
-        echo 'I only execute on the master branch'        
+        for (i in [ 'a', 'b', 'c' ]) {
+            echo i
+         }
     }
     
      stage('Example2') {       
