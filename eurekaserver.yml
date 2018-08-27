@@ -22,6 +22,4 @@ cloud:
      
 logging:
   level:
-    root: DEBUG
-    org.springframework.web: DEBUG
-      
+    root: ERROR
