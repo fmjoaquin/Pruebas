@@ -22,4 +22,4 @@ cloud:
      
 logging:
   level:
-    root: ERROR
+    root: DEBUG
